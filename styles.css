@@ -1,0 +1,49 @@
+#secretWordInput {
+  min-width: 300px;
+}
+
+#message {
+  min-height: 22px;
+}
+
+#head {
+  padding-left: 100px;
+  height: 100px;
+  width: 100px;
+}
+
+#torso {
+  height: 200px;
+  width: 100px;
+}
+
+#leftarm {
+  height: 50px;
+  width: 100px;
+  padding-bottom: 140px;
+}
+
+#rightarm {
+  height: 50px;
+  width: 100px;
+  padding-bottom: 140px;
+}
+
+#leftleg {
+  height: 100px;
+  width: 50px;
+}
+
+#rightleg {
+  height: 100px;
+  width: 50px;
+  padding-left: 100px;
+}
+
+/* #guessForm {
+  display: none;
+} */
+
+body {
+  background-image: url('assets/gallows.jpg')
+}
