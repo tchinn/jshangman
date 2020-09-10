@@ -1,10 +1,12 @@
+// global variables
 var secretWord = null;
 var displayWord = '';
 var guessedLetters = [];
 var incorrectGuessNum = 0;
 var guessNum = 0;
-var bodyPics = ['head', 'rightarm', 'torso', 'leftarm', 'rightleg', 'leftleg'];
+const bodyPics = ['head', 'rightarm', 'torso', 'leftarm', 'rightleg', 'leftleg'];
 
+// find document elements for later use in functions
 const secretWordForm = document.getElementById('secretWordForm');
 const secretInput = document.getElementById('secretWordInput');
 const startScreen = document.getElementById('startScreen');
@@ -17,63 +19,61 @@ const guessedLettersElement = document.getElementById('guessedLetters');
 const secretWordDisplay = document.getElementById('secretWordDisplay');
 const displayWordElement = document.getElementById('displayWord');
 const startNewGameBtn = document.getElementById('startNewGameBtn');
-//startScreen.classList.add('hide');
-//guessForm.classList.add('hide');
-//guessWordInput.classList.add('hide');
+const gallowImg = document.getElementById('gallow');
 
+// handler function for submitting the secret word
+// saves secret word in global variable
+// calls displayGame() to display the start of the game
 function getSecretWord(event) {
   event.preventDefault();
   secretWord = secretWordInput.value.toLowerCase();
-  console.log('secretWord: ' + secretWord);
   startScreen.style.display = 'none';
   displayGame();
 };
 
 secretWordForm.addEventListener('submit', getSecretWord);
 
+// displays the start of the game
+// displays the guess letter and guess word forms
+// displays the hidden word
+// displays the gallow image
 function displayGame() {
-//  var wordBlank = '<h2>Secret Word: </h2><h2>';
   for(var i = 0; i < secretWord.length; i++){
     if(secretWord.charAt(i) === ' '){
       displayWord+= ' ';
-      //wordBlank+= ' ';
     }
-    //wordBlank += '*';
     displayWord+= '*';
   }
-  //wordBlank += displayWord + '</h2>';
-  //const word = document.getElementById('word');
-  //word.innerHTML = wordBlank;
   displayWordElement.innerHTML = displayWord;
   secretWordDisplay.style.display = '';
   guessForm.style.display = '';
   guessWordForm.style.display = '';
+  gallowImg.style.display='';
 }
 
 guessForm.addEventListener('submit', getGuessLetter);
 guessWordForm.addEventListener('submit', getGuessWord);
 startNewGameBtn.addEventListener('click', startNewGame);
 
+// handler function for submitting the guess Letter
+// checks if the input is valid (1 char), is already guessed and then if it is correct or incorrect
 function getGuessLetter(event) {
   event.preventDefault();
   messageElement.innerHTML = '';
   var letter = guessLetterInput.value.toLowerCase();
-  console.log('guess letter: ' + letter);
-  if (letter.length !== 1){
+  if(letter.length !== 1){
     messageElement.innerHTML = 'Invalid input, please submit one letter at a time.';
-  } else if (guessedLetters.includes(letter)){
+  } else if(guessedLetters.includes(letter)){
       messageElement.innerHTML = 'Already guessed: ' + letter + '. Please guess another letter.';
   } else {
       guessNum++;
-      if (guessedLetters.length === 0){
+      if(guessedLetters.length === 0){
         guessedLettersElement.innerHTML = 'Guessed Letters: ' + letter;
       } else {
         guessedLettersElement.innerHTML = guessedLettersElement.innerHTML + ', ' + letter;
       }
       guessedLetters.push(letter);
-      //const indexes = secretWord.matchAll(new RegExp(letter, 'gi')).map(letter => letter.index);
       const indexes = [...secretWord.matchAll(new RegExp(letter, 'gi'))].map(letter => letter.index);
-      console.log(indexes);
       if(indexes.length !== 0){
         correctGuess(indexes, letter);
       } else {
@@ -83,13 +83,14 @@ function getGuessLetter(event) {
   guessLetterInput.value = '';
 }
 
+// handler function for submitting the guess words
+// checks if guess is correct and wins the game or is incorrect
 function getGuessWord(event) {
   event.preventDefault();
   guessNum++;
   messageElement.innerHTML = '';
   var word = guessWordInput.value.toLowerCase();
-  console.log('guess word: ' + word);
-  if (secretWord === word) {
+  if(secretWord === word) {
     winGame();
   } else {
     incorrectGuess();
@@ -97,22 +98,24 @@ function getGuessWord(event) {
   guessWordInput.value = '';
 }
 
+// updates the display word, replacing * with the guessed letter at the correct spots
+// checks if the guess reveals the entire word and wins Game
+// if so call winGame() to end the game
 function correctGuess(indexes, letter) {
-  console.log('correctGuess');
-  console.log(indexes);
-  console.log('letter: ' + letter);
-  console.log('displayWord: ' + displayWord);
   for(var index of indexes){
-    //console.log('displayWord[index] before: ' + displayWord[index]);
-    // displayWord[index] = letter;
-    // console.log('displayWord[index] after: ' + displayWord[index]);
     displayWord = displayWord.substring(0, index) + letter + displayWord.substring(index + 1);
   }
   displayWordElement.innerHTML = displayWord;
-  messageElement.innerHTML = 'Correct guess!';
-  console.log('displayWord: ' + displayWord);
+  if(displayWord.includes('*')){
+    messageElement.innerHTML = 'Correct guess!';
+  } else {
+    winGame();
+  }
 }
 
+// checks if the incorrect guess was the last allowed
+// if so then loseGame() is called to end the Game
+// otherwise displays the incorrect guess message and the new body part
 function incorrectGuess() {
   incorrectGuessNum++;
   if(incorrectGuessNum > 6){
@@ -121,32 +124,33 @@ function incorrectGuess() {
     messageElement.innerHTML = 'Incorrect guess';
     var bodyPart = document.getElementById(bodyPics[incorrectGuessNum - 1]);
     bodyPart.style.display = '';
-    //hangmanImages.innerHTML = hangmanImages.innerHTML + '<image src="assets/' + bodyPics[incorrectGuessNum - 1] + '.jpg"></image>';
   }
-  console.log('incorrectGuess');
 
 }
 
+// display losing game messages
 function loseGame() {
-  console.log('loseGame');
   messageElement.innerHTML = 'You Lose :(. The secret word was: ' + secretWord;
   displayWordElement.innerHTML = secretWord;
   displayEndScreen();
 }
 
+// display winning game messages
 function winGame() {
-  console.log('winGame');
+  displayWordElement.innerHTML = secretWord;
   messageElement.innerHTML = 'You Win :)! It took you ' + guessNum + ' attempt(s).';
   displayEndScreen();
 
 }
 
+// displays end game screen by hiding guess forms and displaying the start new game button
 function displayEndScreen() {
   guessForm.style.display = 'none';
   guessWordForm.style.display = 'none';
   startNewGameBtn.style.display = '';
 }
 
+// reloads the page to start a new game and to show secret word input
 function startNewGame(event) {
   event.preventDefault();
   window.location.reload();

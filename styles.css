@@ -6,44 +6,48 @@
   min-height: 22px;
 }
 
+#gallow {
+  position: absolute;
+}
+
 #head {
-  padding-left: 100px;
+  padding-top: 175px;
+  padding-left: 170px;
   height: 100px;
   width: 100px;
+  z-index:  1;
 }
 
 #torso {
   height: 200px;
   width: 100px;
+  z-index: 1;
 }
 
 #leftarm {
   height: 50px;
   width: 100px;
   padding-bottom: 140px;
+  z-index: 1;
 }
 
 #rightarm {
+  padding-left: 70px;
   height: 50px;
   width: 100px;
   padding-bottom: 140px;
+  z-index: 1;
 }
 
 #leftleg {
   height: 100px;
   width: 50px;
+  z-index: 1;
 }
 
 #rightleg {
   height: 100px;
   width: 50px;
-  padding-left: 100px;
-}
-
-/* #guessForm {
-  display: none;
-} */
-
-body {
-  background-image: url('assets/gallows.jpg')
+  padding-left: 170px;
+  z-index: 1;
 }

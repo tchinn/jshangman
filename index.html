@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <div id="backgroundImg"></div>
     <h1>Hangman!</h1>
     <div id="startScreen">
       <h3>Type the word for the second player to guess and press enter or click the submit button to start! Please no names or slang words!</h3>
@@ -17,7 +18,7 @@
       <h2 id="displayWord"></h2>
     </div>
     <div id="guessForm" style="display: none;">
-      <h3>Type your guess letter. Only submit one letter at a time.</h3>
+      <h3>Guess a letter. Only submit one letter at a time.</h3>
       <form id="guessLetterForm">
         <input id="guessLetterInput" type="text" name="guess letter" placeholder="Guess Letter" >
         <input id="guessSubmitBtn" type="submit" value="Submit">
@@ -34,6 +35,7 @@
     <h4 id="message"></h4>
     <h4 id="guessedLetters"></h4>
     <div id="hangmanImages">
+      <image id="gallow" src="assets/gallow.png" style:"display: none;"></image>
       <image id="head" src="assets/head.jpg" style="display: none;"></image>
       <div id="torsoAndArms">
         <image id="rightarm" src="assets/rightarm.jpg" style="display: none;"></image>
