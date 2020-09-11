@@ -21,6 +21,12 @@ const displayWordElement = document.getElementById('displayWord');
 const startNewGameBtn = document.getElementById('startNewGameBtn');
 const gallowImg = document.getElementById('gallow');
 
+// add event listeners to forms and buttons
+secretWordForm.addEventListener('submit', getSecretWord);
+guessForm.addEventListener('submit', getGuessLetter);
+guessWordForm.addEventListener('submit', getGuessWord);
+startNewGameBtn.addEventListener('click', startNewGame);
+
 // handler function for submitting the secret word
 // saves secret word in global variable
 // calls displayGame() to display the start of the game
@@ -31,8 +37,6 @@ function getSecretWord(event) {
   displayGame();
 };
 
-secretWordForm.addEventListener('submit', getSecretWord);
-
 // displays the start of the game
 // displays the guess letter and guess word forms
 // displays the hidden word
@@ -41,8 +45,9 @@ function displayGame() {
   for(var i = 0; i < secretWord.length; i++){
     if(secretWord.charAt(i) === ' '){
       displayWord+= ' ';
+    } else {
+      displayWord+= '*';
     }
-    displayWord+= '*';
   }
   displayWordElement.innerHTML = displayWord;
   secretWordDisplay.style.display = '';
@@ -50,10 +55,6 @@ function displayGame() {
   guessWordForm.style.display = '';
   gallowImg.style.display='';
 }
-
-guessForm.addEventListener('submit', getGuessLetter);
-guessWordForm.addEventListener('submit', getGuessWord);
-startNewGameBtn.addEventListener('click', startNewGame);
 
 // handler function for submitting the guess Letter
 // checks if the input is valid (1 char), is already guessed and then if it is correct or incorrect
@@ -118,12 +119,11 @@ function correctGuess(indexes, letter) {
 // otherwise displays the incorrect guess message and the new body part
 function incorrectGuess() {
   incorrectGuessNum++;
-  if(incorrectGuessNum > 6){
+  messageElement.innerHTML = 'Incorrect guess';
+  var bodyPart = document.getElementById(bodyPics[incorrectGuessNum - 1]);
+  bodyPart.style.display = '';
+  if(incorrectGuessNum >= 6){
     loseGame();
-  } else {
-    messageElement.innerHTML = 'Incorrect guess';
-    var bodyPart = document.getElementById(bodyPics[incorrectGuessNum - 1]);
-    bodyPart.style.display = '';
   }
 
 }
@@ -138,7 +138,7 @@ function loseGame() {
 // display winning game messages
 function winGame() {
   displayWordElement.innerHTML = secretWord;
-  messageElement.innerHTML = 'You Win :)! It took you ' + guessNum + ' attempt(s).';
+  messageElement.innerHTML = 'You Win :)! It took you ' + guessNum + ' attempt(s). The number of attempts includes all guesses, correct or incorrect.';
   displayEndScreen();
 
 }
